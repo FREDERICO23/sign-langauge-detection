@@ -1,0 +1,28 @@
+/* recognition/static/recognition/css/style.css */
+/* Custom styles for the sign language recognition app */
+.upload-zone {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-zone:hover {
+    border-color: #6610f2;
+    background-color: rgba(102, 16, 242, 0.05);
+}
+
+.result-container {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+}
+
+.result-letter {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #6610f2;
+}
