@@ -1,0 +1,136 @@
+
+<!-- recognition/templates/recognition/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Recognition - Results</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #6610f2 0%, #6f42c1 100%);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .result-letter {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #6610f2;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .confidence-bar {
+            height: 2rem;
+            border-radius: 1rem;
+        }
+        .image-container {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            margin-top: 5rem;
+            padding: 2rem 0;
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">Sign Language Recognition</h1>
+            <p class="lead mb-0">Here's what our AI detected</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card p-4 mb-4">
+                    <div class="row">
+                        <!-- Results Column -->
+                        <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                            <h2 class="mb-4">Recognition Result</h2>
+                            
+                            {% if model_loaded %}
+                                <div class="result-letter mb-4">{{ predicted_letter }}</div>
+                                
+                                <div class="mb-4">
+                                    <h4 class="mb-2">Confidence: {{ confidence|floatformat:1 }}%</h4>
+                                    <div class="progress confidence-bar">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: {{ confidence }}%" 
+                                             aria-valuenow="{{ confidence }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                {% if "J" in predicted_letter or "Z" in predicted_letter %}
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Note: J and Z require motion in ASL and may not be accurately detected.
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-warning mb-4">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Model not loaded. Please ensure the model file is correctly placed.
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Image Column -->
+                        <div class="col-md-6">
+                            <h3 class="mb-3">Your Uploaded Image</h3>
+                            <div class="image-container mb-3">
+                                <img src="{{ sign_image.image.url }}" alt="Uploaded sign" class="img-fluid">
+                            </div>
+                            <p class="text-muted small">Uploaded at: {{ sign_image.uploaded_at|date:"F j, Y, g:i a" }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'recognition:index' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-upload me-2"></i>Try Another Image
+                    </a>
+                    {% if model_loaded %}
+                    <a href="https://www.handspeak.com/word/search/index.php?id={{ predicted_letter }}" target="_blank" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-book me-2"></i>Learn This Sign
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Sign Language Recognition | AI-Powered ASL Detection</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
