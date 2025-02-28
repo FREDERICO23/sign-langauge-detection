@@ -1,5 +1,4 @@
-
-{% load static %}
+<!-- recognition/templates/recognition/result.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,7 +101,8 @@
                         <div class="col-md-6">
                             <h3 class="mb-3">Your Uploaded Image</h3>
                             <div class="image-container mb-3">
-                                <img src="{{ sign_image.image.url }}" alt="Uploaded sign" class="img-fluid">
+                                <!-- Use base64 encoded image instead of URL to avoid media storage issues -->
+                                <img src="{{ img_base64 }}" alt="Uploaded sign" class="img-fluid">
                             </div>
                             <p class="text-muted small">Uploaded at: {{ sign_image.uploaded_at|date:"F j, Y, g:i a" }}</p>
                         </div>
@@ -132,6 +132,5 @@
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

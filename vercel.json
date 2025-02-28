@@ -24,6 +24,9 @@
         "dest": "/media/$1"
       },
       {
+        "handle": "filesystem"
+      },
+      {
         "src": "/(.*)",
         "dest": "setup/wsgi.py"
       }
@@ -33,8 +36,3 @@
       "PYTHONUNBUFFERED": "1"
     }
   }
-  
-  
-
-  
- 

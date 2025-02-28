@@ -1,6 +1,8 @@
 # recognition/views.py
 import os
 import numpy as np
+import base64
+from io import BytesIO
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -37,6 +39,12 @@ def recognize_sign(request):
         img_array = np.array(img) / 255.0  # Normalize pixel values
         img_array = img_array.reshape(1, 28, 28, 1)  # Reshape for model
         
+        # Create a base64 encoded version of the image for display
+        buffered = BytesIO()
+        Image.open(sign_image.image.path).save(buffered, format="JPEG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        img_base64 = f"data:image/jpeg;base64,{img_str}"
+        
         # Load the model and make prediction
         model = load_model()
         
@@ -60,6 +68,7 @@ def recognize_sign(request):
         
         context = {
             'sign_image': sign_image,
+            'img_base64': img_base64,  # Add base64 encoded image
             'predicted_letter': predicted_letter,
             'confidence': confidence * 100,  # Convert to percentage
             'model_loaded': model is not None,
